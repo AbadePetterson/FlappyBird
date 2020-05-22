@@ -73,6 +73,14 @@ const Bird = {
     altura: 24,
     x: 10,
     y: 50,
+    gravity: 0.25,
+    velocity: 0,
+
+    update() {
+        Bird.velocity = Bird.velocity + Bird.gravity;
+        Bird.y = Bird.y + Bird.velocity;
+    },
+
     draw() {
         context.drawImage(
             sprites,
@@ -85,9 +93,11 @@ const Bird = {
     }
 }
  function loop(){
+    Bird.update();
     Background.draw();
     Floor.draw();
     Bird.draw();
+    
     
     
     requestAnimationFrame(loop)
