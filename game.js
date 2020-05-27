@@ -73,14 +73,19 @@ const Bird = {
     altura: 24,
     x: 10,
     y: 50,
+    jumper: 4.6,
+    jump() {
+        console.log('devo pular');
+        console.log('[before]', Bird.velocity);
+        Bird.velocity = - Bird.jumper;
+        console.log('[after]', Bird.velocity);
+    },
     gravity: 0.25,
     velocity: 0,
-
     update() {
         Bird.velocity = Bird.velocity + Bird.gravity;
         Bird.y = Bird.y + Bird.velocity;
     },
-
     draw() {
         context.drawImage(
             sprites,
@@ -88,8 +93,7 @@ const Bird = {
             Bird.largura, Bird.altura, // Tamanho do recorte na sprite
             Bird.x, Bird.y,
             Bird.largura, Bird.altura,
-        ); 
-          
+        );     
     }
 }
 
@@ -142,6 +146,9 @@ Screens.GAME = {
         Background.draw();
         Floor.draw();
         Bird.draw();
+    },
+    click() {
+        Bird.jump();
     },
     update() {
         Bird.update();
