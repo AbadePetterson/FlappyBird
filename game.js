@@ -92,15 +92,75 @@ const Bird = {
           
     }
 }
- function loop(){
-    Bird.update();
-    Background.draw();
-    Floor.draw();
-    Bird.draw();
+
+// [GetReady]
+const GetReady = {
+    sX: 134,
+    sY: 0,
+    w: 174,
+    h: 152,
+    x: (canvas.width / 2) - 174 / 2,
+    y: 50,
+    draw() {
+        context.drawImage(
+            sprites,
+            GetReady.sX, GetReady.sY,
+            GetReady.w, GetReady.h,
+            GetReady.x, GetReady.y,
+            GetReady.w, GetReady.h
+        );
+    }
+}
+
+//
+// [screens]
+//
+let screenOn = {};
+function changeScreen(newScreen) {
+    screenOn = newScreen;
+}
+
+const Screens = {
+    START: {
+        draw(){
+            Background.draw();
+            Floor.draw();
+            Bird.draw();
+            GetReady.draw();
+        },
+        click() {
+            changeScreen(Screens.GAME);
+        },
+        update() {
+
+        }
+    }
+};
+
+Screens.GAME = {
+    draw() {
+        Background.draw();
+        Floor.draw();
+        Bird.draw();
+    },
+    update() {
+        Bird.update();
+    }
+};
+
+ function loop() {
     
+    screenOn.draw();
+    screenOn.update();
     
-    
-    requestAnimationFrame(loop)
+    requestAnimationFrame(loop);
  }
 
+window.addEventListener('click', function() {
+    if(screenOn.click) {
+        screenOn.click();
+    }
+});
+
+ changeScreen(Screens.START);
  loop();
