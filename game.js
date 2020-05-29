@@ -1,5 +1,8 @@
 console.log('flappy Bird')
 
+const HIT = new Audio();
+HIT.src = './songs/hit.wav'; 
+
 const sprites = new Image()
 sprites.src = './sprites.png'
 
@@ -96,8 +99,12 @@ function createBird() {
         update() {
             if(colision(Bird, Floor)){
                 console.log('Fez colisão');
-    
-                changeScreen(Screens.START);
+                HIT.play();
+
+                setTimeout(() => {
+                    changeScreen(Screens.START);
+                }, 500);
+                
                 return;
             }
     
