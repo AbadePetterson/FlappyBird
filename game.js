@@ -40,33 +40,47 @@ const Background = {
     },
 };
 
+function createFloor(){
+    // Floor
+    const Floor = {
+        spriteX: 0,
+        spriteY: 610,
+        largura: 224,
+        altura: 112,
+        x: 0,
+        y: canvas.height - 112,
+        update() {
+            const floorMoviment = 1;
+            const repeat = Floor.largura / 2;
+            const moviment = Floor.x - floorMoviment;
 
-// Floor
-const Floor = {
-    spriteX: 0,
-    spriteY: 610,
-    largura: 224,
-    altura: 112,
-    x: 0,
-    y: canvas.height - 112,
-    draw() {
-        context.drawImage(
-            sprites,
-            Floor.spriteX, Floor.spriteY,
-            Floor.largura, Floor.altura,
-            Floor.x, Floor.y,
-            Floor.largura, Floor.altura,
-        );
+            //console.log("[Floor.x]", Floor.x);
+            //console.log("[repeteEm]", repeat);
+            //console.log("[Movimento]", moviment % repeat);
 
-        context.drawImage(
-            sprites,
-            Floor.spriteX, Floor.spriteY,
-            Floor.largura, Floor.altura,
-            (Floor.x) + Floor.largura, Floor.y,
-            Floor.largura, Floor.altura,
-        );
-    },
-};
+            Floor.x = moviment % repeat;
+        },
+        draw() {
+            context.drawImage(
+                sprites,
+                Floor.spriteX, Floor.spriteY,
+                Floor.largura, Floor.altura,
+                Floor.x, Floor.y,
+                Floor.largura, Floor.altura,
+            );
+
+            context.drawImage(
+                sprites,
+                Floor.spriteX, Floor.spriteY,
+                Floor.largura, Floor.altura,
+                (Floor.x) + Floor.largura, Floor.y,
+                Floor.largura, Floor.altura,
+            );
+        },
+    };
+    return Floor;
+}
+
 
 function colision(Bird, Floor) {
     const birdY = Bird.y + Bird.altura;
@@ -97,7 +111,7 @@ function createBird() {
         gravity: 0.25,
         velocity: 0,
         update() {
-            if(colision(Bird, Floor)){
+            if(colision(Bird, globais.Floor)){
                 console.log('Fez colisão');
                 HIT.play();
 
@@ -105,7 +119,7 @@ function createBird() {
                     changeScreen(Screens.START);
                 }, 500);
                 
-                return;
+                return; 
             }
     
             Bird.velocity = Bird.velocity + Bird.gravity;
@@ -163,10 +177,11 @@ const Screens = {
     START: {
         inicializa() {
             globais.Bird = createBird();
+            globais.Floor = createFloor();
         },
         draw(){
             Background.draw();
-            Floor.draw();
+            globais.Floor.draw();
             globais.Bird.draw();
             GetReady.draw();
         },
@@ -174,7 +189,7 @@ const Screens = {
             changeScreen(Screens.GAME);
         },
         update() {
-
+            globais.Floor.update();
         }
     }
 };
@@ -182,7 +197,7 @@ const Screens = {
 Screens.GAME = {
     draw() {
         Background.draw();
-        Floor.draw();
+        globais.Floor.draw();
         globais.Bird.draw();
     },
     click() {
